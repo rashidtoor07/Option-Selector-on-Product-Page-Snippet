@@ -1,0 +1,112 @@
+<?php
+/**
+ * Perfume Tester Selector for Specific Product
+ * Allows selecting exactly 5 testers and saves to order details
+ */
+
+/* ====== CHANGE THIS PRODUCT ID ====== */
+define('TESTER_PRODUCT_ID', 474); // ← replace with your product ID
+
+/* ====== DISPLAY TESTER SELECTION FORM ====== */
+add_action('woocommerce_before_add_to_cart_button', function () {
+    global $product;
+
+    if (!$product || $product->get_id() !== TESTER_PRODUCT_ID) {
+        return;
+    }
+
+    $testers = [
+	'Ocean Breeze By Mehroz - 5ml',
+	'Black Pulse by Mehroz - 5ml',
+	'Oud Dynasty by Mehroz - 5ml',
+	'Legacy by Mehroz - 5ml',
+	'Enchanted by Mehroz - 5ml',
+	'Her Desire by Mehroz - 5ml',
+	'Musk Al Mehroz – The Signature Scent of Mehroz - 5ml',
+	'Twilight by Mehroz - 5ml',
+	'Toscano by Mehroz - 5ml',
+	'Spice Surge by Mehroz - 5ml',
+	'Vanilla Whisper by Mehroz - 5ml',
+	'Infinee by Mehroz - 5ml'
+    ];
+    ?>
+
+    <div class="tester-selection" style="margin-bottom:20px;">
+        <h4>Select Any 5 Perfume Testers</h4>
+
+        <?php foreach ($testers as $tester): ?>
+            <label style="display:block;">
+                <input type="checkbox" name="perfume_testers[]" value="<?php echo esc_attr($tester); ?>">
+                <?php echo esc_html($tester); ?>
+            </label>
+        <?php endforeach; ?>
+
+        <p style="color:#888;font-size:13px;">You must select exactly 5 testers.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('input[name="perfume_testers[]"]');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const checked = document.querySelectorAll('input[name="perfume_testers[]"]:checked');
+                    if (checked.length > 5) {
+                        cb.checked = false;
+                        alert('You can select only 5 testers.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <?php
+});
+
+/* ====== VALIDATE SELECTION (MUST BE 5) ====== */
+add_filter('woocommerce_add_to_cart_validation', function ($passed, $product_id) {
+
+    if ($product_id === TESTER_PRODUCT_ID) {
+        if (empty($_POST['perfume_testers']) || count($_POST['perfume_testers']) !== 5) {
+            wc_add_notice('Please select exactly 5 perfume testers.', 'error');
+            return false;
+        }
+    }
+
+    return $passed;
+}, 10, 2);
+
+/* ====== SAVE TO CART ITEM ====== */
+add_filter('woocommerce_add_cart_item_data', function ($cart_item_data, $product_id) {
+
+    if ($product_id === TESTER_PRODUCT_ID && !empty($_POST['perfume_testers'])) {
+        $cart_item_data['perfume_testers'] = array_map('sanitize_text_field', $_POST['perfume_testers']);
+    }
+
+    return $cart_item_data;
+}, 10, 2);
+
+/* ====== SHOW IN CART & CHECKOUT ====== */
+add_filter('woocommerce_get_item_data', function ($item_data, $cart_item) {
+
+    if (!empty($cart_item['perfume_testers'])) {
+        $item_data[] = [
+            'name'  => 'Selected Testers',
+            'value' => implode(', ', $cart_item['perfume_testers']),
+        ];
+    }
+
+    return $item_data;
+}, 10, 2);
+
+/* ====== SAVE TO ORDER META ====== */
+add_action('woocommerce_checkout_create_order_line_item', function ($item, $cart_item_key, $values) {
+
+    if (!empty($values['perfume_testers'])) {
+        $item->add_meta_data(
+            'Selected Testers',
+            implode(', ', $values['perfume_testers']),
+            true
+        );
+    }
+
+}, 10, 3);
