@@ -95,55 +95,60 @@
 
 
 /* ═══════════════════════════════════════════════════════════════
-   §1  HERO
+   §1  HERO  — redesigned
 ═══════════════════════════════════════════════════════════════ */
 .sx-hero {
   position: relative;
-  min-height: 96vh;
+  min-height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 55% 45%;
   overflow: hidden;
+  background: #ffffff;
 }
 
-/* Animated grid background */
+/* Dot-grid background */
 .sx-hero::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(245,124,0,.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(245,124,0,.06) 1px, transparent 1px);
-  background-size: 60px 60px;
+  width: 55%;
+  background-image: radial-gradient(circle, rgba(245,124,0,.11) 1px, transparent 1px);
+  background-size: 30px 30px;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Orange glow blob */
+/* Orange glow */
 .sx-hero-glow {
   position: absolute;
   width: 600px; height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(245,124,0,.18) 0%, transparent 70%);
-  top: 50%; left: 50%;
+  background: radial-gradient(circle, rgba(245,124,0,.09) 0%, transparent 65%);
+  top: 50%; left: 26%;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 0;
-  animation: sx-pulse 4s ease-in-out infinite;
+  animation: sx-pulse 5s ease-in-out infinite;
 }
 @keyframes sx-pulse {
-  0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
-  50%       { transform: translate(-50%,-50%) scale(1.15); opacity: .7; }
+  0%, 100% { transform: translate(-50%,-50%) scale(1);    opacity: 1; }
+  50%       { transform: translate(-50%,-50%) scale(1.1);  opacity: .6; }
 }
 
-/* Left — text */
+/* ── LEFT PANEL ─────────────────────────────────────────────── */
 .sx-hero-left {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 100px 80px 100px 80px;
+  justify-content: center;       /* vertically center the block */
+  align-items: flex-start;
+  padding: 0 72px 80px 80px;    /* no top pad — rely on flex center */
+  /* bottom pad = stats bar height so content clears it */
+  padding-bottom: 100px;
 }
+
+/* Live badge */
 .sx-hero-badge {
   display: inline-flex;
   align-items: center;
@@ -152,72 +157,119 @@
   border: 1px solid var(--o-glow);
   padding: 6px 14px;
   font-family: var(--display);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--o);
-  margin-bottom: 28px;
+  margin-bottom: 20px;           /* tight — was 32px */
   width: fit-content;
 }
 .sx-hero-badge span {
-  width: 6px; height: 6px; border-radius: 50%;
+  width: 6px; height: 6px;
+  border-radius: 50%;
   background: var(--o);
-  animation: sx-blink 1.2s ease-in-out infinite;
+  animation: sx-blink 1.4s ease-in-out infinite;
+  flex-shrink: 0;
 }
-@keyframes sx-blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+@keyframes sx-blink { 0%,100%{opacity:1} 50%{opacity:.15} }
 
+/* Hero title */
 .sx-hero-title {
   font-family: var(--display);
-  font-size: clamp(52px, 7vw, 96px);
+  font-size: clamp(56px, 6vw, 92px);
   font-weight: 900;
   line-height: .92;
   text-transform: uppercase;
   letter-spacing: -2px;
-  margin-bottom: 28px;
+  margin-bottom: 20px;           /* tight — was 32px */
+  color: #1a1a1a;
 }
 .sx-hero-title .o { color: var(--o); }
 .sx-hero-title .outline {
-  -webkit-text-stroke: 1.5px rgba(0,0,0,.18);
+  -webkit-text-stroke: 2px rgba(0,0,0,.13);
   color: transparent;
+  display: block;
 }
 
+/* Separator line */
+.sx-hero-sep {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(to right, var(--o), rgba(245,124,0,.15));
+  margin-bottom: 18px;           /* tight — was 28px */
+}
+
+/* Description */
 .sx-hero-desc {
   font-family: var(--body);
   font-size: 15px;
-  color: var(--muted);
+  color: #666;
   line-height: 1.8;
   max-width: 400px;
-  margin-bottom: 40px;
+  margin-bottom: 32px;           /* was 52px */
   font-weight: 300;
 }
 
-.sx-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+/* Buttons row */
+.sx-hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;           /* was 60px — still generous but proportional */
+}
 
+/* Trust pills */
+.sx-hero-trust {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0,0,0,.07);
+}
+.sx-trust-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--body);
+  font-size: 12px;
+  font-weight: 400;
+  color: #666;
+}
+.sx-trust-pill-icon {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--o-dim);
+  border: 1px solid var(--o-glow);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* Scroll hint — sits inside left panel flow, not absolute */
 .sx-hero-scroll {
-  position: absolute;
-  bottom: 40px;
-  left: 80px;
   display: flex;
   align-items: center;
   gap: 10px;
   font-family: var(--display);
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #bbb;
+  margin-top: 28px;
 }
 .sx-scroll-line {
-  width: 40px; height: 1px;
+  width: 32px; height: 1px;
   background: linear-gradient(to right, var(--o), transparent);
-  animation: sx-line 2s ease-in-out infinite;
+  animation: sx-line 2.2s ease-in-out infinite;
 }
 @keyframes sx-line {
-  0%,100%{width:40px; opacity:1}
-  50%{width:60px; opacity:.5}
+  0%,100%{ width:32px; opacity:1 }
+  50%    { width:50px; opacity:.35 }
 }
 
-/* Right — product image area */
+/* ── RIGHT PANEL ────────────────────────────────────────────── */
 .sx-hero-right {
   position: relative;
   z-index: 2;
@@ -225,103 +277,145 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background: #f9f9f9;
+  background: #f4f4f4;
+  clip-path: polygon(5% 0%, 100% 0%, 100% 100%, 0% 100%);
+  padding-bottom: 80px;          /* clear stats bar */
 }
-.sx-hero-img-frame {
-  position: relative;
-  width: 420px;
-  height: 420px;
-}
-/* Rotating ring */
-.sx-ring {
-  position: absolute;
-  inset: -30px;
-  border-radius: 50%;
-  border: 1px solid rgba(245,124,0,.2);
-  animation: sx-spin 20s linear infinite;
-}
-.sx-ring::after {
+
+/* Orange accent bar on far right edge */
+.sx-hero-right::after {
   content: '';
   position: absolute;
-  top: 0; left: 50%;
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--o);
-  transform: translate(-50%, -50%);
+  right: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--o), rgba(245,124,0,.15));
 }
-@keyframes sx-spin { to { transform: rotate(360deg); } }
+
+.sx-hero-img-frame {
+  position: relative;
+  width: 340px;
+  height: 340px;
+}
+
+/* Outer dashed ring */
 .sx-ring-2 {
   position: absolute;
   inset: -60px;
   border-radius: 50%;
-  border: 1px dashed rgba(245,124,0,.1);
-  animation: sx-spin 35s linear infinite reverse;
+  border: 1px dashed rgba(245,124,0,.13);
+  animation: sx-spin 40s linear infinite reverse;
 }
+/* Inner solid ring with dot */
+.sx-ring {
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,124,0,.22);
+  animation: sx-spin 18s linear infinite;
+}
+.sx-ring::before {
+  content: '';
+  position: absolute;
+  top: 50%; right: -5px;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--o);
+  transform: translateY(-50%);
+  box-shadow: 0 0 10px rgba(245,124,0,.55);
+}
+@keyframes sx-spin { to { transform: rotate(360deg); } }
+
+/* Product image */
 .sx-hero-product-img {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 0 60px rgba(245,124,0,.3)) drop-shadow(0 30px 60px rgba(0,0,0,.5));
-  animation: sx-float 4s ease-in-out infinite;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,.15));
+  animation: sx-float 4.5s ease-in-out infinite;
 }
-/* placeholder when no img */
 .sx-hero-img-placeholder {
   width: 100%; height: 100%;
   background:
-    radial-gradient(circle at 40% 40%, rgba(245,124,0,.15) 0%, transparent 60%),
+    radial-gradient(circle at 45% 40%, rgba(245,124,0,.1) 0%, transparent 60%),
     url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80') center/cover;
-  border-radius: 4px;
-  animation: sx-float 4s ease-in-out infinite;
-  filter: drop-shadow(0 0 40px rgba(245,124,0,.2));
+  border-radius: 6px;
+  animation: sx-float 4.5s ease-in-out infinite;
+  box-shadow: 0 20px 50px rgba(0,0,0,.1);
 }
 @keyframes sx-float {
-  0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-16px) }
+  0%,100%{ transform: translateY(0) }
+  50%    { transform: translateY(-14px) }
 }
+
+/* Tag label */
 .sx-hero-tag {
   position: absolute;
-  bottom: -20px;
-  right: -20px;
+  bottom: -12px; right: -12px;
   background: var(--o);
-  color: var(--ink);
+  color: #ffffff;
   font-family: var(--display);
-  font-size: 11px;
+  font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  padding: 10px 18px;
+  padding: 9px 16px;
+  box-shadow: 0 6px 20px rgba(245,124,0,.3);
 }
-/* Stats strip under hero */
+
+/* Price badge */
+.sx-hero-price {
+  position: absolute;
+  top: -12px; left: -12px;
+  background: #1a1a1a;
+  color: #fff;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 9px 14px;
+  line-height: 1.2;
+}
+.sx-hero-price small {
+  display: block;
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  opacity: .5;
+  font-weight: 400;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+/* ── STATS STRIP ────────────────────────────────────────────── */
 .sx-hero-stats {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  background: #ffffff;
-  border-top: 1px solid rgba(0,0,0,.08);
+  background: #1a1a1a;
   display: flex;
   z-index: 3;
-  box-shadow: 0 -2px 20px rgba(0,0,0,.05);
 }
 .sx-stat {
   flex: 1;
-  padding: 20px 30px;
-  border-right: 1px solid rgba(0,0,0,.07);
+  padding: 18px 20px;
+  border-right: 1px solid rgba(255,255,255,.07);
   text-align: center;
   transition: background .3s;
+  cursor: default;
 }
 .sx-stat:last-child { border-right: none; }
-.sx-stat:hover { background: #fafafa; }
+.sx-stat:hover { background: rgba(245,124,0,.08); }
 .sx-stat b {
   display: block;
   font-family: var(--display);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: var(--o);
   line-height: 1;
   margin-bottom: 4px;
 }
 .sx-stat span {
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 1px;
+  font-size: 9.5px;
+  color: rgba(255,255,255,.4);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   font-weight: 300;
 }
 
@@ -1016,8 +1110,11 @@
 ═══════════════════════════════════════════════════════════════ */
 @media (max-width: 1100px) {
   .sx-hero { grid-template-columns: 1fr; min-height: auto; }
-  .sx-hero-right { min-height: 50vw; }
-  .sx-hero-left { padding: 80px 40px 60px; }
+  .sx-hero::before { width: 100%; }
+  .sx-hero-glow { left: 50%; }
+  .sx-hero-right { min-height: 55vw; clip-path: none; padding-bottom: 0; }
+  .sx-hero-right::after { display: none; }
+  .sx-hero-left { padding: 64px 48px 48px; }
   .sx-hero-stats { position: relative; }
   .sx-feature { grid-template-columns: 1fr; }
   .sx-why-inner { grid-template-columns: 1fr; gap: 40px; }
@@ -1030,13 +1127,28 @@
   .sx-all-inner { padding: 0 20px; }
   .sx-wc ul.products,
   .sx-wc .woocommerce ul.products { grid-template-columns: repeat(2, 1fr) !important; }
-  .sx-hero-left { padding: 60px 24px 40px; }
-  .sx-hero-scroll { left: 24px; }
+  .sx-hero-left { padding: 48px 24px 40px; }
+  .sx-hero-desc { margin-bottom: 28px; }
+  .sx-hero-actions { margin-bottom: 32px; }
+  .sx-hero-img-frame { width: 260px; height: 260px; }
+  .sx-hero-right { min-height: 68vw; }
+  .sx-hero-stats { flex-wrap: wrap; }
+  .sx-stat { flex: 1 1 50%; border-bottom: 1px solid rgba(255,255,255,.07); }
 }
 @media (max-width: 480px) {
-  .sx-hero-title { font-size: 52px; letter-spacing: -1px; }
+  .sx-hero-left { padding: 40px 20px 36px; }
+  .sx-hero-title { font-size: 52px; letter-spacing: -1.5px; }
+  .sx-hero-badge { font-size: 9.5px; padding: 5px 12px; margin-bottom: 16px; }
+  .sx-hero-sep { margin-bottom: 14px; }
+  .sx-hero-desc { font-size: 13.5px; margin-bottom: 24px; max-width: 100%; }
+  .sx-hero-actions { flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .sx-hero-actions .sx-btn { width: 100%; justify-content: center; }
+  .sx-hero-trust { gap: 12px; padding-top: 20px; }
+  .sx-trust-pill { font-size: 11px; }
+  .sx-hero-img-frame { width: 200px; height: 200px; }
   .sx-why-grid { grid-template-columns: 1fr; }
-  .sx-stat b { font-size: 22px; }
+  .sx-stat b { font-size: 20px; }
+  .sx-stat { flex: 1 1 50%; padding: 14px 12px; }
 }
 </style>
 
@@ -1057,18 +1169,33 @@
     <div class="sx-hero-left">
       <div class="sx-hero-badge rv"><span></span> New 2025 Lineup Live</div>
       <h1 class="sx-hero-title rv d1">
-        <span class="outline">Next</span><br>
+        <span class="outline">Next</span>
         Level<br>
         <span class="o">Gear.</span>
       </h1>
+      <div class="sx-hero-sep rv d2"></div>
       <p class="sx-hero-desc rv d2">
-        Premium headsets, ultra-fast drives, and precision mice. Built for professionals who demand more.
+        Premium headsets, ultra-fast drives, and precision mice — built for professionals who demand nothing but the best.
       </p>
       <div class="sx-hero-actions rv d3">
         <a href="/shop" class="sx-btn sx-btn-primary">Shop Now →</a>
         <a href="/product-category/headsets" class="sx-btn sx-btn-ghost">View Headsets</a>
       </div>
-      <div class="sx-hero-scroll rv d4">
+      <div class="sx-hero-trust rv d4">
+        <div class="sx-trust-pill">
+          <span class="sx-trust-pill-icon">🛡️</span>
+          100% Authentic
+        </div>
+        <div class="sx-trust-pill">
+          <span class="sx-trust-pill-icon">⚡</span>
+          24hr Delivery
+        </div>
+        <div class="sx-trust-pill">
+          <span class="sx-trust-pill-icon">🔄</span>
+          7-Day Returns
+        </div>
+      </div>
+      <div class="sx-hero-scroll">
         <div class="sx-scroll-line"></div>
         Scroll to explore
       </div>
@@ -1077,8 +1204,12 @@
     <!-- Right product visual -->
     <div class="sx-hero-right rvs d2">
       <div class="sx-hero-img-frame">
-        <div class="sx-ring"></div>
         <div class="sx-ring-2"></div>
+        <div class="sx-ring"></div>
+        <div class="sx-hero-price">
+          <small>Starting From</small>
+          Rs. 1,999
+        </div>
         <div class="sx-hero-img-placeholder"></div>
         <div class="sx-hero-tag">⭐ Editor's Pick</div>
       </div>
@@ -1142,7 +1273,7 @@
       </div>
     </a>
 
-    <a href="/product-category/mouses" class="sx-cat rv d3">
+    <a href="/product-category/mice" class="sx-cat rv d3">
       <img class="sx-cat-img" src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=700&q=80" alt="Mice">
       <div class="sx-cat-num">03</div>
       <div class="sx-cat-icon">🖱️</div>
@@ -1158,7 +1289,7 @@
 
   <!-- ══════════════════════════════════════════════════════════
        §4  HEADSETS
-       WooCommerce: [products category="head-sets" limit="4" columns="4" orderby="popularity"]
+       WooCommerce: [products category="headsets" limit="4" columns="4" orderby="popularity"]
   ══════════════════════════════════════════════════════════════ -->
   <section class="sx-section sx-wc">
     <div class="sx-section-head rv">
@@ -1166,10 +1297,10 @@
         <div class="sx-label">Top Rated</div>
         <h2 class="sx-h">Featured <em>Headsets</em></h2>
       </div>
-      <a href="/product-category/head-sets" class="sx-btn sx-btn-ghost">All Headsets →</a>
+      <a href="/product-category/headsets" class="sx-btn sx-btn-ghost">All Headsets →</a>
     </div>
 
-    [products category="head-sets" limit="4" columns="4" orderby="popularity"]
+    [products category="headsets" limit="4" columns="4" orderby="popularity"]
 
   </section>
 
@@ -1229,13 +1360,13 @@
     <div class="sx-promo-card sx-promo-bg-1 rv">
       <div class="sx-promo-label">Limited Time</div>
       <div class="sx-promo-title">Up to <em>40% Off</em><br>Gaming Gear</div>
-      <a href="/shop" class="sx-promo-link">Shop Sale →</a>
+      <a href="/sale" class="sx-promo-link">Shop Sale →</a>
     </div>
 
     <div class="sx-promo-card sx-promo-bg-2 rv d2">
       <div class="sx-promo-label">New Arrivals</div>
       <div class="sx-promo-title">Wireless<br><em>Mice 2025</em></div>
-      <a href="/product-category/mouses" class="sx-promo-link">Explore →</a>
+      <a href="/product-category/mice" class="sx-promo-link">Explore →</a>
     </div>
 
   </div>
@@ -1252,10 +1383,10 @@
           <div class="sx-label">Precision Control</div>
           <h2 class="sx-h">Pro <em>Mice</em></h2>
         </div>
-        <a href="/product-category/mouses" class="sx-btn sx-btn-ghost">All Mice →</a>
+        <a href="/product-category/mice" class="sx-btn sx-btn-ghost">All Mice →</a>
       </div>
 
-      [products category="mouses" limit="4" columns="4" orderby="popularity"]
+      [products category="mice" limit="4" columns="4" orderby="popularity"]
 
     </div>
   </div>
