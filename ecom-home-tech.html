@@ -1,0 +1,1354 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,500;0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   SAFEX — HOME PAGE
+   Gutenberg Custom HTML Block
+   WooCommerce shortcodes handle product output
+═══════════════════════════════════════════════════════════════ */
+
+.sx *, .sx *::before, .sx *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.sx {
+  --o:      #f57c00;
+  --o2:     #e65c00;
+  --o-dim:  rgba(245,124,0,.08);
+  --o-glow: rgba(245,124,0,.22);
+  --ink:    #ffffff;
+  --ink2:   #f4f4f4;
+  --ink3:   #ebebeb;
+  --wire:   rgba(0,0,0,.09);
+  --muted:  #888;
+  --chalk:  #1a1a1a;
+  --display:'Barlow Condensed', sans-serif;
+  --body:   'DM Sans', sans-serif;
+  --ease:   cubic-bezier(.16,1,.3,1);
+  font-family: var(--body);
+  background: #ffffff;
+  color: #1a1a1a;
+  overflow-x: hidden;
+}
+.sx a { text-decoration: none; color: inherit; }
+.sx img { display: block; width: 100%; object-fit: cover; }
+
+/* ── REVEAL ─────────────────────────────────────────────────── */
+.sx .rv {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.sx .rv.on { opacity: 1; transform: none; }
+.sx .rvl { opacity: 0; transform: translateX(-50px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.sx .rvr { opacity: 0; transform: translateX(50px);  transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.sx .rvs { opacity: 0; transform: scale(.94);        transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.sx .rvl.on, .sx .rvr.on, .sx .rvs.on { opacity: 1; transform: none; }
+.sx .d1 { transition-delay:.08s } .sx .d2 { transition-delay:.16s }
+.sx .d3 { transition-delay:.24s } .sx .d4 { transition-delay:.32s }
+.sx .d5 { transition-delay:.40s } .sx .d6 { transition-delay:.48s }
+
+/* ── SHARED LABEL ───────────────────────────────────────────── */
+.sx-label {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: var(--o);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.sx-label::before { content: ''; width: 28px; height: 2px; background: var(--o); flex-shrink: 0; }
+
+.sx-h {
+  font-family: var(--display);
+  font-size: clamp(40px, 6vw, 80px);
+  font-weight: 900;
+  line-height: .95;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+.sx-h em { font-style: italic; color: var(--o); }
+
+.sx-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  cursor: pointer;
+  border: none;
+  transition: gap .25s, opacity .2s, background .2s;
+}
+.sx-btn-primary { background: var(--o); color: #ffffff; }
+.sx-btn-primary:hover { background: var(--o2); gap: 16px; }
+.sx-btn-ghost { background: transparent; color: #1a1a1a; border: 1px solid rgba(0,0,0,.18); }
+.sx-btn-ghost:hover { border-color: var(--o); color: var(--o); }
+
+.sx-divider { border: none; border-top: 1px solid var(--wire); margin: 0; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §1  HERO
+═══════════════════════════════════════════════════════════════ */
+.sx-hero {
+  position: relative;
+  min-height: 96vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+/* Animated grid background */
+.sx-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245,124,0,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,124,0,.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Orange glow blob */
+.sx-hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,124,0,.18) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: sx-pulse 4s ease-in-out infinite;
+}
+@keyframes sx-pulse {
+  0%, 100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+  50%       { transform: translate(-50%,-50%) scale(1.15); opacity: .7; }
+}
+
+/* Left — text */
+.sx-hero-left {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 80px 100px 80px;
+}
+.sx-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--o-dim);
+  border: 1px solid var(--o-glow);
+  padding: 6px 14px;
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--o);
+  margin-bottom: 28px;
+  width: fit-content;
+}
+.sx-hero-badge span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--o);
+  animation: sx-blink 1.2s ease-in-out infinite;
+}
+@keyframes sx-blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+.sx-hero-title {
+  font-family: var(--display);
+  font-size: clamp(52px, 7vw, 96px);
+  font-weight: 900;
+  line-height: .92;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  margin-bottom: 28px;
+}
+.sx-hero-title .o { color: var(--o); }
+.sx-hero-title .outline {
+  -webkit-text-stroke: 1.5px rgba(0,0,0,.18);
+  color: transparent;
+}
+
+.sx-hero-desc {
+  font-family: var(--body);
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 400px;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+.sx-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.sx-hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 80px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sx-scroll-line {
+  width: 40px; height: 1px;
+  background: linear-gradient(to right, var(--o), transparent);
+  animation: sx-line 2s ease-in-out infinite;
+}
+@keyframes sx-line {
+  0%,100%{width:40px; opacity:1}
+  50%{width:60px; opacity:.5}
+}
+
+/* Right — product image area */
+.sx-hero-right {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f9f9f9;
+}
+.sx-hero-img-frame {
+  position: relative;
+  width: 420px;
+  height: 420px;
+}
+/* Rotating ring */
+.sx-ring {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  border: 1px solid rgba(245,124,0,.2);
+  animation: sx-spin 20s linear infinite;
+}
+.sx-ring::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--o);
+  transform: translate(-50%, -50%);
+}
+@keyframes sx-spin { to { transform: rotate(360deg); } }
+.sx-ring-2 {
+  position: absolute;
+  inset: -60px;
+  border-radius: 50%;
+  border: 1px dashed rgba(245,124,0,.1);
+  animation: sx-spin 35s linear infinite reverse;
+}
+.sx-hero-product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 60px rgba(245,124,0,.3)) drop-shadow(0 30px 60px rgba(0,0,0,.5));
+  animation: sx-float 4s ease-in-out infinite;
+}
+/* placeholder when no img */
+.sx-hero-img-placeholder {
+  width: 100%; height: 100%;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(245,124,0,.15) 0%, transparent 60%),
+    url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80') center/cover;
+  border-radius: 4px;
+  animation: sx-float 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 40px rgba(245,124,0,.2));
+}
+@keyframes sx-float {
+  0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-16px) }
+}
+.sx-hero-tag {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background: var(--o);
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 10px 18px;
+}
+/* Stats strip under hero */
+.sx-hero-stats {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: #ffffff;
+  border-top: 1px solid rgba(0,0,0,.08);
+  display: flex;
+  z-index: 3;
+  box-shadow: 0 -2px 20px rgba(0,0,0,.05);
+}
+.sx-stat {
+  flex: 1;
+  padding: 20px 30px;
+  border-right: 1px solid rgba(0,0,0,.07);
+  text-align: center;
+  transition: background .3s;
+}
+.sx-stat:last-child { border-right: none; }
+.sx-stat:hover { background: #fafafa; }
+.sx-stat b {
+  display: block;
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--o);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.sx-stat span {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §2  CATEGORY STRIP
+═══════════════════════════════════════════════════════════════ */
+.sx-cats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: rgba(0,0,0,.06);
+}
+.sx-cat {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px 36px;
+  min-height: 280px;
+  background: #f4f4f4;
+  transition: background .3s;
+}
+.sx-cat::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 3px;
+  background: var(--o);
+  transition: width .4s var(--ease);
+}
+.sx-cat:hover::before { width: 100%; }
+.sx-cat:hover { background: #eeeeee; }
+.sx-cat-img {
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  opacity: .12;
+  transition: opacity .4s, transform .6s var(--ease);
+}
+.sx-cat:hover .sx-cat-img { opacity: .22; transform: scale(1.05); }
+.sx-cat-num {
+  font-family: var(--display);
+  font-size: 80px;
+  font-weight: 900;
+  color: rgba(245,124,0,.07);
+  position: absolute;
+  top: 10px; right: 16px;
+  line-height: 1;
+  pointer-events: none;
+}
+.sx-cat-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  opacity: .7;
+  transition: opacity .3s, transform .3s;
+}
+.sx-cat:hover .sx-cat-icon { opacity: 1; transform: translateY(-4px); }
+.sx-cat-name {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+.sx-cat-count {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 300;
+  position: relative;
+  z-index: 1;
+}
+.sx-cat-arrow {
+  position: absolute;
+  top: 28px; right: 28px;
+  width: 36px; height: 36px;
+  border: 1px solid rgba(0,0,0,.12);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .3s, transform .3s;
+  color: #1a1a1a;
+}
+.sx-cat:hover .sx-cat-arrow { opacity: 1; transform: translateX(0); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §3  FEATURED BANNER
+═══════════════════════════════════════════════════════════════ */
+.sx-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 520px;
+  overflow: hidden;
+}
+.sx-feature-img {
+  position: relative;
+  overflow: hidden;
+  background: #ebebeb;
+}
+.sx-feature-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: .9;
+  transition: transform .8s var(--ease);
+}
+.sx-feature-img:hover img { transform: scale(1.05); }
+.sx-feature-img-placeholder {
+  width: 100%; height: 100%;
+  min-height: 520px;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(245,124,0,.1) 0%, transparent 55%),
+    url('https://images.unsplash.com/photo-1583394838336-acd977736f90?w=900&q=80') center/cover;
+  transition: transform .8s var(--ease);
+}
+.sx-feature-img:hover .sx-feature-img-placeholder { transform: scale(1.04); }
+.sx-feature-tag {
+  position: absolute;
+  top: 28px; left: 28px;
+  background: var(--o);
+  color: #ffffff;
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+}
+.sx-feature-text {
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.sx-feature-text::after {
+  content: 'PRO';
+  position: absolute;
+  right: -20px; bottom: -20px;
+  font-family: var(--display);
+  font-size: 180px;
+  font-weight: 900;
+  color: rgba(245,124,0,.05);
+  line-height: 1;
+  pointer-events: none;
+}
+.sx-feature-price-tag {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 28px;
+}
+.sx-feature-price {
+  font-family: var(--display);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--o);
+}
+.sx-feature-old {
+  font-size: 18px;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+.sx-feature-save {
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: var(--o-dim);
+  border: 1px solid var(--o-glow);
+  color: var(--o);
+  padding: 4px 10px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §4  HEADSETS SECTION  (WooCommerce shortcode)
+═══════════════════════════════════════════════════════════════ */
+.sx-section {
+  padding: 80px 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.sx-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 44px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+}
+
+/* ── WooCommerce Grid Override ──────────────────────────────── */
+.sx-wc ul.products,
+.sx-wc .woocommerce ul.products {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 2px !important;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  float: none !important;
+}
+
+/* Each card */
+.sx-wc ul.products li.product,
+.sx-wc .woocommerce ul.products li.product {
+  background: #f4f4f4 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  float: none !important;
+  transition: transform .4s var(--ease), box-shadow .4s !important;
+}
+.sx-wc ul.products li.product::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 3px;
+  background: var(--o);
+  transition: width .4s var(--ease);
+  z-index: 4;
+}
+.sx-wc ul.products li.product:hover { transform: translateY(-6px) !important; box-shadow: 0 16px 40px rgba(0,0,0,.1) !important; z-index: 10 !important; }
+.sx-wc ul.products li.product:hover::before { width: 100%; }
+
+/* Image */
+.sx-wc ul.products li.product a.woocommerce-LoopProduct-link { display: block !important; overflow: hidden !important; }
+.sx-wc ul.products li.product img {
+  width: 100% !important;
+  aspect-ratio: 1 !important;
+  object-fit: cover !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transition: transform .6s var(--ease), filter .4s !important;
+  filter: brightness(.96) !important;
+}
+.sx-wc ul.products li.product:hover img { transform: scale(1.07) !important; filter: brightness(1) !important; }
+
+/* Sale badge */
+.sx-wc ul.products li.product .onsale,
+.sx-wc span.onsale {
+  position: absolute !important;
+  top: 10px !important; left: 10px !important;
+  right: auto !important; bottom: auto !important;
+  background: var(--o) !important;
+  color: #ffffff !important;
+  font-family: var(--display) !important;
+  font-size: 9px !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  text-transform: uppercase !important;
+  padding: 4px 10px !important;
+  border-radius: 0 !important;
+  min-height: auto !important;
+  line-height: 1.5 !important;
+  z-index: 5 !important;
+  margin: 0 !important;
+  width: auto !important;
+  display: inline-block !important;
+}
+
+/* Title */
+.sx-wc ul.products li.product .woocommerce-loop-product__title,
+.sx-wc ul.products li.product h2 {
+  font-family: var(--display) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .5px !important;
+  color: #1a1a1a !important;
+  line-height: 1.25 !important;
+  padding: 16px 16px 0 !important;
+  margin: 0 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Stars */
+.sx-wc ul.products li.product .star-rating,
+.sx-wc .star-rating {
+  display: block !important;
+  overflow: hidden !important;
+  position: relative !important;
+  height: 14px !important;
+  line-height: 1 !important;
+  font-size: 12px !important;
+  width: 68px !important;
+  margin: 6px 16px 0 !important;
+  float: none !important;
+}
+.sx-wc .star-rating::before {
+  content: '\2605\2605\2605\2605\2605' !important;
+  color: rgba(0,0,0,.1) !important;
+  position: absolute !important;
+  top: 0; left: 0 !important;
+  letter-spacing: 2px !important;
+}
+.sx-wc .star-rating span {
+  overflow: hidden !important;
+  position: absolute !important;
+  top: 0; left: 0 !important;
+  padding-top: 1.5em !important;
+  display: block !important;
+}
+.sx-wc .star-rating span::before {
+  content: '\2605\2605\2605\2605\2605' !important;
+  position: absolute !important;
+  top: 0; left: 0 !important;
+  color: var(--o) !important;
+  letter-spacing: 2px !important;
+}
+
+/* Price — THE fix: force row direction */
+.sx-wc ul.products li.product .price,
+.sx-wc .woocommerce ul.products li.product .price,
+.sx-wc ul.products li.product span.price {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  font-family: var(--display) !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+  padding: 6px 16px 18px !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+.sx-wc ul.products li.product .price .woocommerce-Price-amount,
+.sx-wc ul.products li.product .price bdi,
+.sx-wc ul.products li.product .price .woocommerce-Price-currencySymbol {
+  display: inline !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  white-space: nowrap !important;
+}
+.sx-wc ul.products li.product .price del,
+.sx-wc ul.products li.product .price del .woocommerce-Price-amount {
+  color: var(--muted) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  opacity: 1 !important;
+  text-decoration: line-through !important;
+  white-space: nowrap !important;
+  display: inline !important;
+}
+.sx-wc ul.products li.product .price ins {
+  text-decoration: none !important;
+  display: inline !important;
+}
+.sx-wc ul.products li.product .price ins .woocommerce-Price-amount {
+  color: var(--o) !important;
+  font-weight: 700 !important;
+  display: inline !important;
+}
+
+/* Add to cart */
+.sx-wc ul.products li.product .button,
+.sx-wc ul.products li.product a.button,
+.sx-wc ul.products li.product .add_to_cart_button {
+  position: absolute !important;
+  bottom: -50px !important;
+  left: 0 !important; right: 0 !important;
+  width: 100% !important;
+  background: var(--o) !important;
+  color: #ffffff !important;
+  font-family: var(--display) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  padding: 13px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  cursor: pointer !important;
+  display: block !important;
+  transition: bottom .32s var(--ease) !important;
+  margin: 0 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+}
+.sx-wc ul.products li.product:hover .button,
+.sx-wc ul.products li.product:hover .add_to_cart_button { bottom: 0 !important; }
+.sx-wc ul.products li.product .button:hover { background: var(--o2) !important; }
+.sx-wc ul.products li.product .added_to_cart {
+  position: absolute !important;
+  bottom: -50px !important;
+  left: 0 !important; right: 0 !important;
+  width: 100% !important;
+  background: #2a7a2a !important;
+  color: #fff !important;
+  font-family: var(--display) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  letter-spacing: 3px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  padding: 13px !important;
+  display: block !important;
+  text-decoration: none !important;
+  transition: bottom .32s var(--ease) !important;
+  white-space: nowrap !important;
+}
+.sx-wc ul.products li.product:hover .added_to_cart { bottom: 0 !important; }
+
+/* hide WC chrome */
+.sx-wc .woocommerce-result-count,
+.sx-wc .woocommerce-ordering,
+.sx-wc .woocommerce-pagination { display: none !important; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §5  MARQUEE TICKER
+═══════════════════════════════════════════════════════════════ */
+.sx-ticker {
+  background: var(--o);
+  padding: 14px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.sx-ticker-track {
+  display: inline-flex;
+  animation: sx-tick 22s linear infinite;
+}
+@keyframes sx-tick { to { transform: translateX(-50%); } }
+.sx-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.sx-ticker-sep { opacity: .4; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §6  PROMO BANNER (2-col)
+═══════════════════════════════════════════════════════════════ */
+.sx-promo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.sx-promo-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px;
+  cursor: pointer;
+  background: var(--ink2);
+}
+.sx-promo-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: .3;
+  transition: opacity .4s, transform .6s var(--ease);
+}
+.sx-promo-card:hover img { opacity: .5; transform: scale(1.05); }
+.sx-promo-bg-1 {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1208 100%);
+}
+.sx-promo-bg-1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&q=80') center/cover;
+  opacity: .25;
+  transition: opacity .4s;
+}
+.sx-promo-card:hover.sx-promo-bg-1::before { opacity: .4; }
+.sx-promo-bg-2::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&q=80') center/cover;
+  opacity: .25;
+  transition: opacity .4s;
+}
+.sx-promo-card:hover.sx-promo-bg-2::before { opacity: .4; }
+.sx-promo-label {
+  font-family: var(--display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--o);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+.sx-promo-title {
+  font-family: var(--display);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--chalk);
+  line-height: .95;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+.sx-promo-title em { color: var(--o); font-style: normal; }
+.sx-promo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--chalk);
+  border-bottom: 1px solid rgba(255,255,255,.3);
+  padding-bottom: 2px;
+  position: relative;
+  z-index: 1;
+  transition: color .2s, border-color .2s, gap .25s;
+  width: fit-content;
+}
+.sx-promo-card:hover .sx-promo-link { color: var(--o); border-color: var(--o); gap: 14px; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §7  WHY SAFEX
+═══════════════════════════════════════════════════════════════ */
+.sx-why {
+  background: #f4f4f4;
+  padding: 80px 60px;
+}
+.sx-why-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 80px;
+  align-items: start;
+}
+.sx-why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.sx-why-card {
+  background: #ffffff;
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: background .3s, box-shadow .3s;
+}
+.sx-why-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 0;
+  background: var(--o);
+  transition: height .4s var(--ease);
+}
+.sx-why-card:hover { background: #fafafa; box-shadow: 0 8px 30px rgba(0,0,0,.07); }
+.sx-why-card:hover::before { height: 100%; }
+.sx-why-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+  display: block;
+  opacity: .7;
+  transition: opacity .3s, transform .3s;
+}
+.sx-why-card:hover .sx-why-icon { opacity: 1; transform: scale(1.1); }
+.sx-why-card-title {
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+.sx-why-card-text {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §8  ALL PRODUCTS (drives + mice shortcodes)
+═══════════════════════════════════════════════════════════════ */
+.sx-all { background: #f9f9f9; padding: 80px 0; }
+.sx-all-inner { max-width: 1400px; margin: 0 auto; padding: 0 60px; }
+.sx-section-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 44px;
+}
+.sx-tab {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(0,0,0,.1);
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.sx-tab.active, .sx-tab:hover {
+  background: var(--o);
+  color: #ffffff;
+  border-color: var(--o);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   §9  CTA BANNER
+═══════════════════════════════════════════════════════════════ */
+.sx-cta {
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 40px;
+}
+.sx-cta-bg {
+  position: absolute;
+  inset: -10%;
+  width: 120%; height: 120%;
+  background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&q=80') center/cover;
+  filter: brightness(.2);
+  will-change: transform;
+}
+.sx-cta-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(245,124,0,.2) 0%, rgba(0,0,0,.75) 100%);
+}
+.sx-cta-content { position: relative; z-index: 2; max-width: 700px; }
+.sx-cta-content .sx-h { margin-bottom: 20px; color: #ffffff; }
+.sx-cta-desc {
+  font-size: 15px;
+  color: rgba(255,255,255,.65);
+  line-height: 1.8;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+.sx-cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+/* CTA buttons stay white-on-dark since it's over dark overlay */
+.sx-cta .sx-btn-ghost { color: #ffffff; border-color: rgba(255,255,255,.3); }
+.sx-cta .sx-btn-ghost:hover { border-color: var(--o); color: var(--o); }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .sx-hero { grid-template-columns: 1fr; min-height: auto; }
+  .sx-hero-right { min-height: 50vw; }
+  .sx-hero-left { padding: 80px 40px 60px; }
+  .sx-hero-stats { position: relative; }
+  .sx-feature { grid-template-columns: 1fr; }
+  .sx-why-inner { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 900px) {
+  .sx-section { padding: 60px 20px; }
+  .sx-cats { grid-template-columns: 1fr; }
+  .sx-promo-grid { grid-template-columns: 1fr; }
+  .sx-why { padding: 60px 20px; }
+  .sx-all-inner { padding: 0 20px; }
+  .sx-wc ul.products,
+  .sx-wc .woocommerce ul.products { grid-template-columns: repeat(2, 1fr) !important; }
+  .sx-hero-left { padding: 60px 24px 40px; }
+  .sx-hero-scroll { left: 24px; }
+}
+@media (max-width: 480px) {
+  .sx-hero-title { font-size: 52px; letter-spacing: -1px; }
+  .sx-why-grid { grid-template-columns: 1fr; }
+  .sx-stat b { font-size: 22px; }
+}
+</style>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     SAFEX HOME PAGE
+════════════════════════════════════════════════════════════════ -->
+<div class="sx" id="sxPage">
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §1  HERO
+  ══════════════════════════════════════════════════════════════ -->
+  <section class="sx-hero">
+    <div class="sx-hero-glow"></div>
+
+    <!-- Left text -->
+    <div class="sx-hero-left">
+      <div class="sx-hero-badge rv"><span></span> New 2025 Lineup Live</div>
+      <h1 class="sx-hero-title rv d1">
+        <span class="outline">Next</span><br>
+        Level<br>
+        <span class="o">Gear.</span>
+      </h1>
+      <p class="sx-hero-desc rv d2">
+        Premium headsets, ultra-fast drives, and precision mice. Built for professionals who demand more.
+      </p>
+      <div class="sx-hero-actions rv d3">
+        <a href="/shop" class="sx-btn sx-btn-primary">Shop Now →</a>
+        <a href="/product-category/headsets" class="sx-btn sx-btn-ghost">View Headsets</a>
+      </div>
+      <div class="sx-hero-scroll rv d4">
+        <div class="sx-scroll-line"></div>
+        Scroll to explore
+      </div>
+    </div>
+
+    <!-- Right product visual -->
+    <div class="sx-hero-right rvs d2">
+      <div class="sx-hero-img-frame">
+        <div class="sx-ring"></div>
+        <div class="sx-ring-2"></div>
+        <div class="sx-hero-img-placeholder"></div>
+        <div class="sx-hero-tag">⭐ Editor's Pick</div>
+      </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="sx-hero-stats">
+      <div class="sx-stat"><b>500+</b><span>Products</span></div>
+      <div class="sx-stat"><b>50K+</b><span>Happy Customers</span></div>
+      <div class="sx-stat"><b>5★</b><span>Rated</span></div>
+      <div class="sx-stat"><b>24hr</b><span>Fast Delivery</span></div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §2  TICKER
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="sx-ticker" aria-hidden="true">
+    <div class="sx-ticker-track">
+      <span class="sx-ticker-item">Free Shipping Above Rs.5,000 <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">Premium Headsets <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">High-Speed Drives <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">Pro Gaming Mice <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">safex.com.pk <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">COD Available <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">Free Shipping Above Rs.5,000 <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">Premium Headsets <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">High-Speed Drives <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">Pro Gaming Mice <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">safex.com.pk <span class="sx-ticker-sep">✦</span></span>
+      <span class="sx-ticker-item">COD Available <span class="sx-ticker-sep">✦</span></span>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §3  CATEGORY CARDS
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="sx-cats">
+
+    <a href="/product-category/headsets" class="sx-cat rv d1">
+      <img class="sx-cat-img" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=700&q=80" alt="Headsets">
+      <div class="sx-cat-num">01</div>
+      <div class="sx-cat-icon">🎧</div>
+      <div class="sx-cat-name">Headsets</div>
+      <div class="sx-cat-count">Studio · Gaming · Wireless</div>
+      <div class="sx-cat-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </a>
+
+    <a href="/product-category/drives" class="sx-cat rv d2">
+      <img class="sx-cat-img" src="https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=700&q=80" alt="Drives">
+      <div class="sx-cat-num">02</div>
+      <div class="sx-cat-icon">💾</div>
+      <div class="sx-cat-name">Drives</div>
+      <div class="sx-cat-count">SSD · HDD · Flash Drives</div>
+      <div class="sx-cat-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </a>
+
+    <a href="/product-category/mouses" class="sx-cat rv d3">
+      <img class="sx-cat-img" src="https://images.unsplash.com/photo-1527814050087-3793815479db?w=700&q=80" alt="Mice">
+      <div class="sx-cat-num">03</div>
+      <div class="sx-cat-icon">🖱️</div>
+      <div class="sx-cat-name">Mice</div>
+      <div class="sx-cat-count">Gaming · Office · Wireless</div>
+      <div class="sx-cat-arrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </a>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §4  HEADSETS
+       WooCommerce: [products category="head-sets" limit="4" columns="4" orderby="popularity"]
+  ══════════════════════════════════════════════════════════════ -->
+  <section class="sx-section sx-wc">
+    <div class="sx-section-head rv">
+      <div>
+        <div class="sx-label">Top Rated</div>
+        <h2 class="sx-h">Featured <em>Headsets</em></h2>
+      </div>
+      <a href="/product-category/head-sets" class="sx-btn sx-btn-ghost">All Headsets →</a>
+    </div>
+
+    [products category="head-sets" limit="4" columns="4" orderby="popularity"]
+
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §5  FEATURED PRODUCT BANNER
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="sx-feature">
+    <div class="sx-feature-img rvl">
+      <div class="sx-feature-img-placeholder"></div>
+      <div class="sx-feature-tag">⚡ Best Value</div>
+    </div>
+    <div class="sx-feature-text rvr">
+      <div class="sx-label">Flash Deal</div>
+      <h2 class="sx-h" style="font-size:clamp(40px,5vw,72px);margin-bottom:18px">
+        Pro Drive<br><em>Series X</em>
+      </h2>
+      <p style="font-size:14px;color:var(--muted);line-height:1.9;max-width:380px;font-weight:300">
+        NVMe SSD with read speeds up to 7,400 MB/s. Zero compromise on performance. Ships in 24 hours across Pakistan.
+      </p>
+      <div class="sx-feature-price-tag">
+        <span class="sx-feature-price">Rs. 8,999</span>
+        <span class="sx-feature-old">Rs. 12,500</span>
+        <span class="sx-feature-save">Save 28%</span>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:28px;flex-wrap:wrap">
+        <a href="/product-category/drives" class="sx-btn sx-btn-primary">Shop Drives →</a>
+        <a href="/shop" class="sx-btn sx-btn-ghost">View All</a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §6  DRIVES
+       WooCommerce: [products category="drives" limit="4" columns="4" orderby="date" order="DESC"]
+  ══════════════════════════════════════════════════════════════ -->
+  <section class="sx-section sx-wc" style="background:#f4f4f4">
+    <div class="sx-section-head rv">
+      <div>
+        <div class="sx-label">Fast & Reliable</div>
+        <h2 class="sx-h">Storage <em>Drives</em></h2>
+      </div>
+      <a href="/product-category/drives" class="sx-btn sx-btn-ghost">All Drives →</a>
+    </div>
+
+    [products category="drives" limit="4" columns="4" orderby="date" order="DESC"]
+
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §7  PROMO 2-COL BANNERS
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="sx-promo-grid">
+
+    <div class="sx-promo-card sx-promo-bg-1 rv">
+      <div class="sx-promo-label">Limited Time</div>
+      <div class="sx-promo-title">Up to <em>40% Off</em><br>Gaming Gear</div>
+      <a href="/shop" class="sx-promo-link">Shop Sale →</a>
+    </div>
+
+    <div class="sx-promo-card sx-promo-bg-2 rv d2">
+      <div class="sx-promo-label">New Arrivals</div>
+      <div class="sx-promo-title">Wireless<br><em>Mice 2025</em></div>
+      <a href="/product-category/mouses" class="sx-promo-link">Explore →</a>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §8  MICE
+       WooCommerce: [products category="mice" limit="4" columns="4" orderby="popularity"]
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="sx-all">
+    <div class="sx-all-inner sx-wc">
+      <div class="sx-section-head rv">
+        <div>
+          <div class="sx-label">Precision Control</div>
+          <h2 class="sx-h">Pro <em>Mice</em></h2>
+        </div>
+        <a href="/product-category/mouses" class="sx-btn sx-btn-ghost">All Mice →</a>
+      </div>
+
+      [products category="mouses" limit="4" columns="4" orderby="popularity"]
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §9  WHY SAFEX
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="sx-why">
+    <div class="sx-why-inner">
+      <div>
+        <div class="sx-label rv">Why Choose Us</div>
+        <h2 class="sx-h rv d1" style="font-size:clamp(38px,5vw,64px)">The <em>SafeX</em><br>Promise</h2>
+        <p style="font-size:14px;color:#666;line-height:1.9;margin-top:20px;font-weight:300" class="rv d2">
+          We don't just sell gadgets — we deliver experiences. Every product is tested, every order is tracked, every customer is valued.
+        </p>
+      </div>
+      <div class="sx-why-grid">
+        <div class="sx-why-card rv d1">
+          <span class="sx-why-icon">🛡️</span>
+          <div class="sx-why-card-title">Verified Products</div>
+          <p class="sx-why-card-text">100% authentic gear sourced from official distributors. No grey market, no fakes.</p>
+        </div>
+        <div class="sx-why-card rv d2">
+          <span class="sx-why-icon">⚡</span>
+          <div class="sx-why-card-title">Fast Delivery</div>
+          <p class="sx-why-card-text">Same-day dispatch in Lahore. Nationwide delivery within 24–48 hours.</p>
+        </div>
+        <div class="sx-why-card rv d3">
+          <span class="sx-why-icon">🔄</span>
+          <div class="sx-why-card-title">Easy Returns</div>
+          <p class="sx-why-card-text">7-day hassle-free returns. No questions asked if you're not satisfied.</p>
+        </div>
+        <div class="sx-why-card rv d4">
+          <span class="sx-why-icon">💬</span>
+          <div class="sx-why-card-title">24/7 Support</div>
+          <p class="sx-why-card-text">Real humans, real help. WhatsApp, call, or email — we're always here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════
+       §10  CTA BANNER
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="sx-cta">
+    <div class="sx-cta-bg" id="sxParallax"></div>
+    <div class="sx-cta-overlay"></div>
+    <div class="sx-cta-content rv">
+      <div class="sx-label" style="justify-content:center;margin-bottom:18px;color:var(--o)">safex.com.pk</div>
+      <h2 class="sx-h" style="margin-bottom:18px;color:#ffffff">
+        Level Up Your<br><em>Setup Today</em>
+      </h2>
+      <p class="sx-cta-desc">
+        Pakistan's go-to destination for premium tech. Order today and transform your workspace.
+      </p>
+      <div class="sx-cta-btns">
+        <a href="/shop" class="sx-btn sx-btn-primary">Browse All Products →</a>
+        <a href="/contact" class="sx-btn sx-btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.3)">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+
+</div><!-- /.sx -->
+
+
+<script>
+(function () {
+
+  /* ── Scroll reveal ─────────────────────────────────────── */
+  var els = document.querySelectorAll('#sxPage .rv, #sxPage .rvl, #sxPage .rvr, #sxPage .rvs');
+  if (els.length) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ── Parallax CTA ──────────────────────────────────────── */
+  var pbg = document.getElementById('sxParallax');
+  if (pbg) {
+    window.addEventListener('scroll', function () {
+      var rect = pbg.parentElement.getBoundingClientRect();
+      var vh   = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > vh) return;
+      var p = (vh - rect.top) / (vh + rect.height);
+      pbg.style.transform = 'translateY(' + ((p - .5) * -80) + 'px)';
+    }, { passive: true });
+  }
+
+})();
+</script>
